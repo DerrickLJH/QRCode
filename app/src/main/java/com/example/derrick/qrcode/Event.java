@@ -27,7 +27,6 @@ public class Event {
 
     @Override
     public String toString() {
-        return "event_id=" + event_id +
-                "&event_name=" + event_name;
+        return "event_id=112233&event_name=SOI FYP Project Briefing";
     }
 }

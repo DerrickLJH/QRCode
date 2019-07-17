@@ -3,6 +3,7 @@ package com.example.derrick.qrcode;
 import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.os.Handler;
 import android.os.Vibrator;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
@@ -41,13 +42,16 @@ public class MainActivity extends AppCompatActivity {
     final int reqPermissionId = 1001;
     private AsyncHttpClient client;
     private ArrayList<Event> al;
+    Boolean isRegistered = false;
+    Boolean isInvalid = false;
+    int count = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        client = new AsyncHttpClient();
+        /*client = new AsyncHttpClient();
 
         client.get("http://10.0.2.2/FYP/getListOfEvents.php", new JsonHttpResponseHandler(){
             @Override
@@ -66,11 +70,10 @@ public class MainActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
             }
-        });
+        }); */
 
         svCamera = findViewById(R.id.svCamera);
         tvData = findViewById(R.id.tvData);
-
 
 
         barcodeDetector = new BarcodeDetector.Builder(this)
@@ -89,6 +92,7 @@ public class MainActivity extends AppCompatActivity {
                 }
                 try {
                     cameraSource.start(svCamera.getHolder());
+
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -114,18 +118,32 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void receiveDetections(Detector.Detections<Barcode> detections) {
                 final SparseArray<Barcode> qrCodes = detections.getDetectedItems();
-                if(qrCodes.size() != 0){
+                if (qrCodes.size() != 0) {
                     tvData.post(new Runnable() {
                         @Override
                         public void run() {
                             String code = qrCodes.valueAt(0).displayValue;
-                            for (int i = 0; i < al.size(); i++){
-                                if (code == al.get(i).toString()){
+                            //for (int i = 0; i < al.size(); i++){
+                            Log.i("code", code);
+
+                            if (code.equalsIgnoreCase("event_id=112233&event_name=SOI FYP Project Briefing")) {
+                                if (!isRegistered) {
                                     Vibrator vibrator = (Vibrator) getApplicationContext().getSystemService(Context.VIBRATOR_SERVICE);
-                                    vibrator.vibrate(1000);
+                                    vibrator.vibrate(100);
                                     Toast.makeText(MainActivity.this, "Event Successfully Registered", Toast.LENGTH_LONG).show();
+                                    tvData.setText(code);
+                                    isRegistered = true;
+                                    isInvalid = false;
+                                }
+                            } else {
+                                if (!isInvalid) {
+                                    Toast.makeText(MainActivity.this, "Invalid Code", Toast.LENGTH_LONG).show();
+                                    isInvalid = true;
                                 }
                             }
+                            //}
+
+
                         }
                     });
                 }
