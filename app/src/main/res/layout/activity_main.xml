@@ -5,23 +5,15 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:gravity="center"
     tools:context=".MainActivity">
 
-
-    <SurfaceView
-        android:id="@+id/svCamera"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1" />
-
-
-    <TextView
-        android:id="@+id/tvData"
-        android:layout_width="match_parent"
+    <Button
+        android:id="@+id/btnScan"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:gravity="center"
-        android:text="Default Text"
-        android:textSize="20sp"
-        android:textStyle="bold" />
-
+        android:padding="10dp"
+        android:background="@color/colorPrimary"
+        android:textColor="@color/white"
+        android:text="Scan QR Code"/>
 </LinearLayout>
